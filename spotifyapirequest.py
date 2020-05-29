@@ -10,15 +10,14 @@ def create_query():
     sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
     return sp
 # retrieve songs ids from playlists
-def get_ids(sp,ids):
+def get_ids(sp,id):
     songs_ids=[]
-    for id in ids:
-        res=sp.playlist(id)
-        tracks=res['tracks']
-        show_tracks(tracks,songs_ids)
-        while tracks['next']:
-            tracks=sp.next(tracks)
-            show_tracks(tracks, songs_ids)
+    res=sp.playlist(id)
+    tracks=res['tracks']
+    show_tracks(tracks,songs_ids)
+    while tracks['next']:
+        tracks=sp.next(tracks)
+        show_tracks(tracks, songs_ids)
     return songs_ids  
   
 def show_tracks(res,uri):
@@ -41,14 +40,14 @@ def get_features_df(sp,song_ids):
                               f['time_signature'], f['danceability'],
                               f['key'], f['duration_ms'],
                               f['loudness'], f['valence'],
-                              f['mode']]) 
+                              f['mode']])
     df = pd.DataFrame(features_ls, columns=['id','energy', 'liveness',
                                               'tempo', 'speechiness',
                                               'acousticness', 'instrumentalness',
                                               'time_signature', 'danceability',
                                               'key', 'duration_ms', 'loudness',
                                               'valence', 'mode'])
-    df.to_csv('features_spotify.csv',index=False)
+    return df
     
         
 if __name__ == '__main__':
@@ -58,9 +57,15 @@ if __name__ == '__main__':
           '76h0bH2KJhiBuLZqfvPp3K',
           '5tA2x3J6yAaJpa7mHGvhmB',
           ] 
+    genres=['pop','rock','r&b','country']
     sp=create_query()
-    song_ids=get_ids(sp,ids)
-    get_features_df(sp, song_ids)
+    i=0
+    for genre in genres:
+        song_ids=get_ids(sp,ids[i])
+        df=get_features_df(sp, song_ids)
+        df.to_csv('{}_spotify.csv'.format(genre),index=False)
+        i+=1
+
     
   
     
