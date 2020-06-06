@@ -15,7 +15,7 @@
  - scipy
  
 ### Checkout the notebook [here](https://nbviewer.jupyter.org/github/nouranali/classify-Spotify-music-genres-from-spotify-API-/blob/master/spotify%20genres.ipynb) to show all plots "plotly isn't rendered on github yet"
-### also checkout the .py files for codes interacting with API
+### also checkout the .py file for codes interacting with API
 
 ## Resources:
 
